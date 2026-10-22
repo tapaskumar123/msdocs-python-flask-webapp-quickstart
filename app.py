@@ -5,6 +5,7 @@ from flask import (Flask, redirect, render_template, request,
 
 app = Flask(__name__)
 
+import time, random
 
 @app.route('/')
 def index():
@@ -27,6 +28,28 @@ def hello():
        print('Request for hello page received with no name or blank name -- redirecting')
        return redirect(url_for('index'))
 
+@app.route('/api/products')
+def products():
+    time.sleep(random.uniform(0.1, 0.4))
+    return {"items": ["laptop", "phone", "tablet"]}
+
+@app.route('/api/checkout')
+def checkout():
+    time.sleep(random.uniform(0.5, 2.5))
+    if random.random() < 0.3:
+        raise Exception("Payment gateway timeout (demo)")
+    return {"status": "order placed"}
+
+@app.route('/api/login')
+def login():
+    if random.random() < 0.2:
+        return {"error": "invalid credentials"}, 401
+    return {"status": "ok"}
+
+@app.route('/api/report')
+def report():
+    time.sleep(3)
+    return {"report": "ready"}
 
 if __name__ == '__main__':
    app.run()
